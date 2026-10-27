@@ -1,5 +1,0 @@
-{
-  "cv_table": true,
-  "predictions": true,
-  "test_not_evaluated": true
-}
