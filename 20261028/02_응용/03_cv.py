@@ -2,6 +2,7 @@
 from pathlib import Path
 import pandas as pd
 import numpy as np
+
 HERE = Path(__file__).resolve().parent
 raw = pd.read_csv(HERE / "data/requests.csv").set_index("request_id")
 manifest = pd.read_csv(HERE / "data/split_manifest.csv")
@@ -14,11 +15,13 @@ X_train, X_valid = train[FEATURES].copy(), valid[FEATURES].copy()
 y_train, y_valid = train["failed"], valid["failed"]
 OUT = HERE / "outputs"
 OUT.mkdir(exist_ok=True)
+
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 # 제공: 모든 평균·중앙값·범주 목록은 Pipeline.fit의 학습 부분에서만 결정됩니다.
+
 pre = ColumnTransformer([
     ("num", Pipeline([("imputer", SimpleImputer(strategy="median", keep_empty_features=True)),
                       ("scaler", StandardScaler())]), NUM),
@@ -29,11 +32,14 @@ pre = ColumnTransformer([
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_validate
 from sklearn.metrics import make_scorer, f1_score
+
 model = Pipeline([("pre", pre), ("model", LogisticRegression(C=1, max_iter=1000))])
 folds = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+
 # TODO A03: train만 넣어 F1과 AUC를 함께 구하세요. 전처리한 배열 대신 model 전체를 전달합니다.
-scores = {"test_f1": np.zeros(5), "test_auc": np.zeros(5)}
+scores = cross_validate(model.fit(X_train,y_train),X_valid,y_valid,scoring={"f1":make_scorer(f1_score,zero_division=0),"auc":"roc_auc"}) ###{"test_f1": np.zeros(5), "test_auc": np.zeros(5)}
 # TODO 끝
+
 result = pd.DataFrame({"fold": range(1, 6), "F1": scores["test_f1"], "ROC_AUC": scores["test_auc"]})
 result.to_csv(OUT / "classification_cv.csv", index=False, encoding="utf-8-sig")
 print(result.round(3).to_string(index=False))

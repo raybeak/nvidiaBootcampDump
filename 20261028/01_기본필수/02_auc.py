@@ -4,7 +4,7 @@ from sklearn.metrics import roc_auc_score, roc_curve
 y = [0, 0, 1, 1]
 score = [0.10, 0.40, 0.35, 0.80]
 # TODO B02: roc_auc_score에 실제값과 연속 점수를 넣으세요.
-auc = 0.0
+auc = roc_auc_score(y,score)
 # TODO 끝
 fpr, tpr, thresholds = roc_curve(y, score)
 print("FPR:", fpr.round(2).tolist())

@@ -13,6 +13,7 @@ from sklearn.cluster import KMeans
 model = KMeans(n_clusters=2, n_init=10, random_state=42)
 # TODO B05: KMeans를 train의 input_chars 한 열로 학습하세요. 정답 y는 전달하지 않습니다.
 pass
+model.fit(train,sample_weight=model(["imput_chars"]))
 # TODO 끝
 result = train[["request_id", "input_chars"]].copy()
 result["cluster"] = model.labels_

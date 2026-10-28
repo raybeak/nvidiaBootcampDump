@@ -6,7 +6,10 @@ pred = [0]*10 + [1]*4 + [0]*4 + [1]*2
 print("혼동행렬(행 실제 / 열 예측, 성공0·실패1)")
 print(confusion_matrix(y, pred, labels=[0, 1]))
 # TODO B01: 네 지표 함수에 실제값 y와 예측값 pred를 순서대로 넣으세요. zero_division=0은 분모가 0일 때 0으로 표시하는 정책입니다.
-acc = precision = recall = f1 = 0.0
+acc = accuracy_score(y, pred)
+precision = precision_score(y, pred, zero_division=0)
+recall = recall_score(y, pred, zero_division=0)
+f1 = f1_score(y, pred, zero_division=0)
 # TODO 끝
 print(f"Accuracy={acc:.3f}, Precision={precision:.3f}, Recall={recall:.3f}, F1={f1:.3f}")
 print("실제 실패 6건 중 발견: 2건")
