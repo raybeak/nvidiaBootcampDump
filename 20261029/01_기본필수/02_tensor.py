@@ -6,7 +6,7 @@ vector = torch.tensor([1.0, 2.0, 3.0])
 # 자료를 CPU로 옮기는 코드는 제공되어 있습니다.
 # >>> B02
 # TODO B02: 위 요구사항을 읽고 이 블록을 완성하세요.
-matrix = torch.tensor([1.0, 2.0, 3.0, 4.0], dtype=torch.float32)
+matrix = torch.tensor([[1.0, 2.0], [3.0, 4.0]], dtype=torch.float32)
 # <<< B02
 matrix = matrix.to("cpu")
 print("스칼라:", tuple(scalar.shape), scalar.dtype, scalar.device)
