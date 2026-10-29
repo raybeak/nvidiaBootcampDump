@@ -41,7 +41,8 @@ for epoch in range(81):
             # zero_grad와 순전파·손실 계산은 위에 제공되어 있습니다.
             # >>> A06
             # TODO A06: 위 요구사항을 읽고 이 블록을 완성하세요.
-            pass
+            loss.backward()
+            optimizer.step()
             # <<< A06
     # epoch=0은 학습 전입니다. 로그는 갱신이 끝난 동일 모델로 측정합니다.
     if epoch % 10 == 0:

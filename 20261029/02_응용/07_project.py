@@ -41,6 +41,8 @@ for epoch in range(81):
             # train 자료만 loader에 들어갑니다. valid로 backward하거나 학습하지 마세요.
             # >>> A07
             # TODO A07: 위 요구사항을 읽고 이 블록을 완성하세요.
+            loss.backward()
+            optimizer.step()
             pass
             # <<< A07
     # epoch=0은 학습 전입니다. 로그는 갱신이 끝난 동일 모델로 측정합니다.
@@ -67,12 +69,15 @@ with torch.no_grad():
     # >>> A08
     # TODO A08: 위 요구사항을 읽고 이 블록을 완성하세요.
     predictions = torch.zeros(len(y_valid), dtype=torch.long)
+    predictions = torch.argmax(logits,1,keepdim=True)
     # <<< A08
 metrics = {"device": str(device), "torch": str(torch.__version__), "epochs": 80,
            "train_rows": len(train_rows), "valid_rows": len(valid_rows), "test_used": False,
            "initial_train_loss": history[0][1], "final_train_loss": history[-1][1],
            "valid_loss": history[-1][2], "valid_accuracy": history[-1][3]}
+
 (out / "final_metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
+
 with (out / "validation_predictions.csv").open("w", encoding="utf-8-sig", newline="") as f:
     writer = csv.writer(f); writer.writerow(["id", "actual", "predicted"])
     writer.writerows((r["id"], int(y), int(p)) for r, y, p in zip(valid_rows, y_valid, predictions))
@@ -89,10 +94,12 @@ print("생성: outputs의 환경·학습·검증 결과")
 # 완료: 오류 행 수 = 40 - 맞힌 개수, 저장 파일은 헤더를 포함합니다.
 # >>> A10
 # TODO A10: 실제 오답 행만 ID와 함께 수집하세요.
-errors = []
+"""errors = []
+for i,j,k in zip(): <- brain dead moment idk what to put in
+    errors.append({"id":i,"actual":j,"predicted":k}) if else pass
 # <<< A10
 with (out / "validation_errors.csv").open("w", encoding="utf-8-sig", newline="") as f:
     writer = csv.writer(f)
     writer.writerow(["id", "actual", "predicted"])
     writer.writerows(errors)
-print("valid 오답 수:", len(errors))
+print("valid 오답 수:", len(errors))""" 
