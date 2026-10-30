@@ -10,6 +10,7 @@ import copy
 import matplotlib
 matplotlib.use("Agg")  # 창을 띄우지 않고 PNG에 저장합니다.
 import matplotlib.pyplot as plt
+#importLib
 
 out = base / "outputs"
 out.mkdir(exist_ok=True)
@@ -22,12 +23,14 @@ X_train = torch.tensor(train[["x1", "x2"]].values, dtype=torch.float32)
 y_train = torch.tensor(train["label"].values, dtype=torch.long)
 X_valid = torch.tensor(valid[["x1", "x2"]].values, dtype=torch.float32).to(device)
 y_valid = torch.tensor(valid["label"].values, dtype=torch.long).to(device)
+#loadVal
+
 loss_fn = nn.CrossEntropyLoss()
 # bn=False와 bn=True만 다른 두 설정을 구성하세요.
 # batch_size=32는 동일하고 마지막 16건도 학습합니다. BatchNorm을 사용하는 train batch는 2건 이상이어야 합니다.
 # >>> A06
 # TODO A06: 위 요구사항에 맞게 이 블록만 완성합니다.
-configs = [{'name': 'baseline', 'lr': 0.01, 'bn': False}]
+configs = [{'name': 'baseline', 'lr': 0.01, 'bn': False},{'name': 'batcbnumTrue01', 'lr': 0.01, 'bn': True}]
 # <<< A06
 summary = []
 
@@ -85,6 +88,8 @@ for config in configs:
     plt.tight_layout()
     plt.savefig(out / f"06_{name}_curves.png", dpi=150)
     plt.close()
+    #matplotlib stuff
+
     print(name, "best epoch:", int(best["epoch"]), "best valid loss:", round(best["valid_loss"], 6))
 result = pd.DataFrame(summary)
 result.to_csv(out / "06_comparison.csv", index=False)

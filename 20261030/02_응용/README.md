@@ -269,7 +269,8 @@ TODO가 요구하는 후보 수·값·출력 모양을 모두 확인하고, 아�
 
 BN은 eval에서 어떤 통계를 쓰나요? batch 크기도 기록하세요.
 
-내 설명: ______________________________
+내 설명: ____ batch_size=32 <-refed line 49 in 06_batchnorm.py
+batchNorm은 eval에서 누적된 정규화에 사용된 mean/spread를 사용한다고 생각한다. ____
 
 ---
 ## 07. 실습 07~08 · Optimizer·Dropout 실험표 · PPT 75,79쪽
