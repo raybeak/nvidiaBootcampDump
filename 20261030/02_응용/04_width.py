@@ -10,6 +10,7 @@ import copy
 import matplotlib
 matplotlib.use("Agg")  # 창을 띄우지 않고 PNG에 저장합니다.
 import matplotlib.pyplot as plt
+#importLib
 
 out = base / "outputs"
 out.mkdir(exist_ok=True)
@@ -22,12 +23,14 @@ X_train = torch.tensor(train[["x1", "x2"]].values, dtype=torch.float32)
 y_train = torch.tensor(train["label"].values, dtype=torch.long)
 X_valid = torch.tensor(valid[["x1", "x2"]].values, dtype=torch.float32).to(device)
 y_valid = torch.tensor(valid["label"].values, dtype=torch.long).to(device)
+#loadVlas
+
 loss_fn = nn.CrossEntropyLoss()
 # width 8과 64만 비교하세요. lr=0.01이고 각 40 epochs입니다.
 # 서로 다른 폭의 모델은 파라미터 모양이 달라 동일 가중치일 수 없으며, 같은 초기화 seed를 사용합니다.
 # >>> A04
 # TODO A04: 위 요구사항에 맞게 이 블록만 완성합니다.
-configs = [{'name': 'width8', 'lr': 0.01, 'width': 8}]
+configs = [{'name': 'width8', 'lr': 0.01, 'width': 8},{'name': 'width64', 'lr': 0.01, 'width': 64}]
 # <<< A04
 summary = []
 
@@ -51,7 +54,9 @@ for config in configs:
     else:
         optimizer = torch.optim.AdamW(model.parameters(), lr=config["lr"], weight_decay=0.0)
     history = []
+
     for epoch in range(1, 40 + 1):
+        #actual training
         model.train()
         for xb, yb in loader:
             xb, yb = xb.to(device), yb.to(device)
@@ -75,6 +80,7 @@ for config in configs:
                     "best_valid_loss": float(best["valid_loss"]),
                     "valid_acc_at_best": float(best["valid_acc"]),
                     "last_train_loss_eval": train_loss, "last_valid_loss": valid_loss})
+    
     plt.figure(figsize=(8, 5))
     plt.plot(table["epoch"], table["train_loss_eval"], label="train (eval)")
     plt.plot(table["epoch"], table["valid_loss"], label="valid")
@@ -85,6 +91,8 @@ for config in configs:
     plt.tight_layout()
     plt.savefig(out / f"04_{name}_curves.png", dpi=150)
     plt.close()
+    #matplotlib stuff happens here like magic * ~ * 
+
     print(name, "best epoch:", int(best["epoch"]), "best valid loss:", round(best["valid_loss"], 6))
 result = pd.DataFrame(summary)
 result.to_csv(out / "04_comparison.csv", index=False)
