@@ -10,6 +10,7 @@ import copy
 import matplotlib
 matplotlib.use("Agg")  # 창을 띄우지 않고 PNG에 저장합니다.
 import matplotlib.pyplot as plt
+#imports
 
 out = base / "outputs"
 out.mkdir(exist_ok=True)
@@ -22,16 +23,19 @@ X_train = torch.tensor(train[["x1", "x2"]].values, dtype=torch.float32)
 y_train = torch.tensor(train["label"].values, dtype=torch.long)
 X_valid = torch.tensor(valid[["x1", "x2"]].values, dtype=torch.float32).to(device)
 y_valid = torch.tensor(valid["label"].values, dtype=torch.long).to(device)
+#load values
+
 loss_fn = nn.CrossEntropyLoss()
 # AdamW의 lr 후보 0.001, 0.01, 0.1을 세 설정으로 만드세요.
 # 실행 순서·seed·모델 폭·데이터는 바꾸지 않습니다.
 # >>> A02
 # TODO A02: 위 요구사항에 맞게 이 블록만 완성합니다.
-configs = [{'name': 'lr0.001', 'lr': 0.001}]
+configs = [{'name': 'lr0.001', 'lr': 0.001},{'name': 'lr0.01', 'lr': 0.01},{'name': 'lr0.1', 'lr': 0.1}]
 # <<< A02
 summary = []
 
 for config in configs:
+
     torch.manual_seed(42)
     width = config.get("width", 32)
     layers = [nn.Linear(2, width)]
@@ -51,7 +55,8 @@ for config in configs:
     else:
         optimizer = torch.optim.AdamW(model.parameters(), lr=config["lr"], weight_decay=0.0)
     history = []
-    for epoch in range(1, 20 + 1):
+
+    for epoch in range(1, 20 + 1):#actual training
         model.train()
         for xb, yb in loader:
             xb, yb = xb.to(device), yb.to(device)
@@ -71,10 +76,12 @@ for config in configs:
     best = table.loc[table["valid_loss"].idxmin()]
     name = config["name"]
     table.to_csv(out / f"02_{name}_history.csv", index=False)
+
     summary.append({**config, "best_epoch": int(best["epoch"]),
                     "best_valid_loss": float(best["valid_loss"]),
                     "valid_acc_at_best": float(best["valid_acc"]),
                     "last_train_loss_eval": train_loss, "last_valid_loss": valid_loss})
+    
     plt.figure(figsize=(8, 5))
     plt.plot(table["epoch"], table["train_loss_eval"], label="train (eval)")
     plt.plot(table["epoch"], table["valid_loss"], label="valid")
@@ -85,6 +92,8 @@ for config in configs:
     plt.tight_layout()
     plt.savefig(out / f"02_{name}_curves.png", dpi=150)
     plt.close()
+    #matplotlib stuff
+    
     print(name, "best epoch:", int(best["epoch"]), "best valid loss:", round(best["valid_loss"], 6))
 result = pd.DataFrame(summary)
 result.to_csv(out / "02_comparison.csv", index=False)
