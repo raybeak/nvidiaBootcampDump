@@ -10,6 +10,7 @@ import copy
 import matplotlib
 matplotlib.use("Agg")  # 창을 띄우지 않고 PNG에 저장합니다.
 import matplotlib.pyplot as plt
+#importLib
 
 out = base / "outputs"
 out.mkdir(exist_ok=True)
@@ -22,12 +23,15 @@ X_train = torch.tensor(train[["x1", "x2"]].values, dtype=torch.float32)
 y_train = torch.tensor(train["label"].values, dtype=torch.long)
 X_valid = torch.tensor(valid[["x1", "x2"]].values, dtype=torch.float32).to(device)
 y_valid = torch.tensor(valid["label"].values, dtype=torch.long).to(device)
+#loadVals
+
 loss_fn = nn.CrossEntropyLoss()
+
 # Dropout 확률 p=0.0과 p=0.3을 비교하세요.
 # 평가에서는 model.eval()과 no_grad를 모두 사용하고, best epoch는 valid loss로 찾습니다.
 # >>> A05
 # TODO A05: 위 요구사항에 맞게 이 블록만 완성합니다.
-configs = [{'name': 'dropout0.0', 'lr': 0.01, 'dropout': 0.0}]
+configs = [{'name': 'dropout0.0', 'lr': 0.01, 'dropout': 0.0},{'name': 'dropout0.3', 'lr': 0.01, 'dropout': 0.3}]
 # <<< A05
 summary = []
 
@@ -52,6 +56,7 @@ for config in configs:
         optimizer = torch.optim.AdamW(model.parameters(), lr=config["lr"], weight_decay=0.0)
     history = []
     for epoch in range(1, 40 + 1):
+        #epochStart
         model.train()
         for xb, yb in loader:
             xb, yb = xb.to(device), yb.to(device)
@@ -85,6 +90,8 @@ for config in configs:
     plt.tight_layout()
     plt.savefig(out / f"05_{name}_curves.png", dpi=150)
     plt.close()
+    #matplotlib stuff
+
     print(name, "best epoch:", int(best["epoch"]), "best valid loss:", round(best["valid_loss"], 6))
 result = pd.DataFrame(summary)
 result.to_csv(out / "05_comparison.csv", index=False)
