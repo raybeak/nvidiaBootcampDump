@@ -2,6 +2,7 @@ from pathlib import Path
 import pandas as pd
 import torch
 from torch import nn
+#importLib
 
 torch.set_num_threads(1)
 base = Path(__file__).resolve().parent
@@ -15,17 +16,24 @@ X_train = torch.tensor(train[["x1", "x2"]].values, dtype=torch.float32)
 y_train = torch.tensor(train["label"].values, dtype=torch.long)
 X_valid = torch.tensor(valid[["x1", "x2"]].values, dtype=torch.float32)
 y_valid = torch.tensor(valid["label"].values, dtype=torch.long)
+#loadVals
 # test 4건은 읽은 표에만 있으며 학습/평가 Tensor로 만들지 않습니다.
 
 # 실습 07~08: 기준 lr과 비교 lr만 다릅니다. 더 나쁘게 나와도 그대로 보고합니다.
 loss_fn = nn.CrossEntropyLoss()
 summary = []
+
 for name, lr in [("baseline", 0.001), ("candidate", 0.01)]:
+
     torch.manual_seed(42)
     model = nn.Sequential(nn.Linear(2, 8), nn.ReLU(), nn.Linear(8, 2))
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.0)
+    #set model & optimizer
+
     history = []
+
     for epoch in range(1, 21):
+        #actual training   
         model.train()
         optimizer.zero_grad()
         loss = loss_fn(model(X_train), y_train)
@@ -33,7 +41,8 @@ for name, lr in [("baseline", 0.001), ("candidate", 0.01)]:
         # 학습 데이터만 사용합니다. 비교 후보마다 모델을 처음부터 새로 만듭니다.
         # >>> B08
         # TODO B08: 위 요구사항에 맞게 이 블록만 완성합니다.
-        pass
+        loss.backward() # backpropagation here
+        optimizer.step()  # this code runs optimizer
         # <<< B08
         model.eval()
         with torch.no_grad():
@@ -43,7 +52,7 @@ for name, lr in [("baseline", 0.001), ("candidate", 0.01)]:
         # history.append([epoch, train_loss, valid_loss]) 형태로 추가합니다.
         # >>> B09
         # TODO B09: 위 요구사항에 맞게 이 블록만 완성합니다.
-        history.append([epoch, train_loss, 0.0])
+        history.append([epoch, train_loss, valid_loss])
         # <<< B09
     table = pd.DataFrame(history, columns=["epoch", "train_loss_eval", "valid_loss"])
     table.to_csv(base / f"history_{name}.csv", index=False)
