@@ -10,11 +10,12 @@ import copy
 import matplotlib
 matplotlib.use("Agg")  # 창을 띄우지 않고 PNG에 저장합니다.
 import matplotlib.pyplot as plt
+#imports
 
 out = base / "outputs"
 out.mkdir(exist_ok=True)
 # 재현용 기본값 CPU. GPU 실습은 강사 확인 뒤 device 문자열만 cuda:0으로 바꿉니다.
-device = torch.device("cpu")
+device = torch.device("cuda:0"if torch.cuda.is_available == True else"cpu")
 df = pd.read_csv(base / "data" / "points.csv")
 train = df[df["split"] == "train"]
 valid = df[df["split"] == "valid"]
@@ -22,13 +23,16 @@ X_train = torch.tensor(train[["x1", "x2"]].values, dtype=torch.float32)
 y_train = torch.tensor(train["label"].values, dtype=torch.long)
 X_valid = torch.tensor(valid[["x1", "x2"]].values, dtype=torch.float32).to(device)
 y_valid = torch.tensor(valid["label"].values, dtype=torch.long).to(device)
+#load val
+
 loss_fn = nn.CrossEntropyLoss()
+
 
 # batch_size 후보를 [8, 32]로 두세요. 총 train 행은 240건입니다.
 # drop_last=False이므로 32인 경우 마지막 배치는 16건입니다.
 # >>> A03
 # TODO A03: 위 요구사항에 맞게 이 블록만 완성합니다.
-batch_sizes = [32]
+batch_sizes = [8,32]
 # <<< A03
 rows = []
 for size in batch_sizes:
