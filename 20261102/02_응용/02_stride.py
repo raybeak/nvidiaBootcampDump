@@ -8,20 +8,23 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 import pandas as pd
+#importLib
 
 torch.manual_seed(42)
 torch.set_num_threads(1)
 root = Path(__file__).resolve().parent
 out = root / "outputs"
 out.mkdir(exist_ok=True)
+#loadVals
 
 x = torch.rand(4, 3, 32, 32)
 rows = []
+
 for stride in [1, 2]:
     torch.manual_seed(42)
     # BEGIN A02
     # TODO A02: 현재 반복의 stride를 Conv2d에 전달한다.
-    conv = nn.Conv2d(3, 8, 3, stride=1, padding=1)
+    conv = nn.Conv2d(3, 8, 3, stride=stride, padding=1)
     # END A02
     y = conv(x)
     params = sum(p.numel() for p in conv.parameters())

@@ -101,6 +101,7 @@ python 02_conv.py
 ```
 
 **완료·설명**: 입력·출력의 공간 크기와 학습 파라미터 수를 계산하고, stride가 바뀌어도 파라미터 수가 그대로일 수 있는 이유를 설명합니다.
+설명:__padding/stride값의 추가로 인해서 크기가 바뀌지 않음,pram is $3*3*3*8=216$ and bias $C_{out}=8$ so $pram_{total} = 216+8$ __
 
 ## 03_pool.py · Pooling과 CNN
 
