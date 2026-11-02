@@ -162,6 +162,8 @@ best epoch: 5
 
 **완료·설명**: valid loss가 최소인 epoch를 찾고 마지막 모델과 best 모델의 차이를 설명합니다. 정답이 높아도 간단한 합성 이미지의 소표본 결과임을 함께 적습니다.
 
+설명:epoch 5가 loss가 가장 적었으며 Valid loss에서도 높은 drop을 보임. epoch 초기에 약간의 흔들림이 보였으나 그 이후 빠른 하강이 관측됨.
+
 ## 06_transfer.py · Head와 layer4 비교
 
 PPT 70쪽과 연결합니다. 이 단계 폴더를 터미널의 현재 위치로 둡니다.

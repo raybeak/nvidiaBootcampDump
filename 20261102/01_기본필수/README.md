@@ -184,6 +184,8 @@ epoch=5 train_loss=0.4358 valid_loss=0.4664 valid_acc=1.00
 
 **완료·설명**: valid loss가 최소인 epoch를 찾고 마지막 모델과 best 모델의 차이를 설명합니다. 정답이 높아도 간단한 합성 이미지의 소표본 결과임을 함께 적습니다.
 
+설명 : epoch 5 가 마지막 모델이자 가장 좋은 모델이다. epoch가 늘어날수록 Valid_loss가 더욱 빠르게 줄어든다.
+
 ## 06_transfer.py · 실제 전이학습
 
 PPT 70쪽과 연결합니다. 이 단계 폴더를 터미널의 현재 위치로 둡니다.

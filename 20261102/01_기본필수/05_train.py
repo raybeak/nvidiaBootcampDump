@@ -5,6 +5,7 @@ import torch
 from torch import nn
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
+#importLib
 
 root = Path(__file__).resolve().parent
 torch.manual_seed(42)
@@ -15,6 +16,7 @@ valid = datasets.ImageFolder(root / "data" / "valid", transform=transform)
 # 작은 정상 데이터는 한 배치로 읽어 학습 순서를 단순하게 관찰한다.
 x_train, y_train = next(iter(DataLoader(train, batch_size=len(train), shuffle=False)))
 x_valid, y_valid = next(iter(DataLoader(valid, batch_size=len(valid), shuffle=False)))
+#loadVals
 
 model = nn.Sequential(
     nn.Conv2d(3, 16, 3, padding=1), nn.ReLU(), nn.MaxPool2d(2),
@@ -24,7 +26,10 @@ model = nn.Sequential(
 optimizer = torch.optim.AdamW(model.parameters(), lr=0.01, weight_decay=0.0)
 loss_fn = nn.CrossEntropyLoss()
 best_loss = float("inf")
+#setModel
+
 for epoch in range(1, 6):
+    #actual Train runs here
     model.train()
     optimizer.zero_grad()
     logits = model(x_train)
@@ -32,8 +37,10 @@ for epoch in range(1, 6):
     # 해설 B05: backward는 미분값 계산, step은 그 값을 이용한 갱신이다.
     # BEGIN B05
     # TODO B05: loss를 역전파하고 optimizer로 한 번 갱신한다.
-    pass
+    loss.backward()
+    optimizer.step()
     # END B05
+
     model.eval()
     with torch.no_grad():
         train_loss = loss_fn(model(x_train), y_train).item()
@@ -44,5 +51,8 @@ for epoch in range(1, 6):
     if valid_loss < best_loss:
         best_loss, best_epoch = valid_loss, epoch
         best_state = copy.deepcopy(model.state_dict())
+
 model.load_state_dict(best_state)
+#modelLoadBestState
 print("선택한 epoch:", best_epoch)
+#printOutput
