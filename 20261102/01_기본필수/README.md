@@ -131,6 +131,11 @@ Linear (4, 2)
 
 **완료·설명**: Conv/Pool/Adaptive Pool/Flatten/Head를 거치는 shape를 적고, 마지막 출력 2개가 클래스 점수라는 것을 설명합니다.
 
+설명:original size -> 4img 3 channals 32 x 32,
+$3_{inputChannal} \cdot (3 \cdot 3)_{kernelSize} \cdot 16 _{outputChannal}+16_{outputChannal}$,
+
+maxPool2d -> $(32 \cdot 32)/2_{maxPool2dVal}$,
+
 ## 04_images.py · 이미지 읽기
 
 PPT 47쪽과 연결합니다. 이 단계 폴더를 터미널의 현재 위치로 둡니다.

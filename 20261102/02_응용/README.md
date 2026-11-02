@@ -109,6 +109,7 @@ conv_stride2 (4, 8, 16, 16)     584
 ```
 
 **완료·설명**: Conv/Pool/Adaptive Pool/Flatten/Head를 거치는 shape를 적고, 마지막 출력 2개가 클래스 점수라는 것을 설명합니다.
+__설명: 4,8,32,32 -> maxPool2d(2) -> 4,8,16,16 -> conv2d(8,8,3) -> $8_{inputChannal} \cdot (3 \cdot 3)_{scopeSizeInt}\cdot 8_{outputChannal}+8_{outputChannal}$ 이다.__
 
 ## 04_transforms.py · train/valid 변환 분리
 
