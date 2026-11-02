@@ -78,6 +78,8 @@ device: cpu
 
 **완료·설명**: N/C/H/W를 자기 말로 설명하고 같은 값을 다른 축 순서로 표시한 것과 이미지 내용이 변한 것을 구분합니다.
 
+설명:__N/C/H/W : N == number of imgs, C == channal of img,H/W == size of img.__
+
 ## 02_conv.py · 합성곱
 
 PPT 22쪽과 연결합니다. 이 단계 폴더를 터미널의 현재 위치로 둡니다.
