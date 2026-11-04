@@ -20,7 +20,7 @@ def augment(image,seed):
     result=cv2.flip(image,1) if flip else image.copy()
     # >>> TODO H06
     # beta를 적용하되 uint8의 순환을 막고 값 범위를 지키세요. 원본 image는 수정하지 않습니다.
-    result=result.copy()
+    result=np.clip(np.uint8(np.float32(result.copy())+beta),0,255)
     # <<< TODO H06
     return result,{"seed":seed,"flip":flip,"beta":beta}
 
