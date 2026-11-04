@@ -16,7 +16,7 @@ gray = cv2.imread("data/scene.png", cv2.IMREAD_GRAYSCALE)
 fixed_t, fixed = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 # >>> TODO A04
 # Otsu로 임계값을 자동 결정하세요. 반환값 두 개를 otsu_t와 otsu로 받습니다.
-otsu_t, otsu = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+otsu_t, otsu = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 # <<< TODO A04
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
 rows = []

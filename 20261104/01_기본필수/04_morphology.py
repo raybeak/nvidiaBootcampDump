@@ -11,10 +11,12 @@ image = cv2.imread("objects.png")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 threshold_value, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
 kernel = np.ones((3, 3), dtype=np.uint8)
+
 # >>> TODO B04
 # binary에 3×3 kernel을 사용한 Opening을 적용하세요. 결과 이름은 opened입니다.
-opened = binary.copy()
+opened = cv2.morphologyEx(binary,cv2.MORPH_OPEN, kernel)
 # <<< TODO B04
+
 cv2.imwrite("p04_gray.png", gray)
 cv2.imwrite("p04_binary.png", binary)
 cv2.imwrite("p04_open.png", opened)

@@ -16,9 +16,10 @@ def process_image(image):
     """원본 배열 → Gray·Resize·Edge. 파일 읽기는 호출한 쪽에서 합니다."""
     # >>> TODO A07
     # Gray→160×120 Resize→3×3 Gaussian→Canny 80/160을 구현하세요. 반환 변수 gray·small·edge를 만듭니다.
-    gray = image[:, :, 0]
+    gray = cv2.cvtColor(image,6)
     small = cv2.resize(gray, (160, 120))
-    edge = small.copy()
+    edge = cv2.Canny(cv2.GaussianBlur(small.copy(),(3,3),sigmaX=0),80,160)
+
     # <<< TODO A07
     return gray, small, edge
 
@@ -26,7 +27,8 @@ def process_frame(frame):
     """Writer가 받을 160×120 BGR 프레임을 반환합니다."""
     # >>> TODO A08
     # process_image(frame)의 세 번째 반환값 edge를 받아 3채널 BGR로 변환해 반환하세요.
-    return cv2.resize(frame, (160, 120))
+    _,_,edge=process_image(frame)
+    return cv2.resize(cv2.cvtColor(edge,8), (160, 120))
     # <<< TODO A08
 
 rows = []

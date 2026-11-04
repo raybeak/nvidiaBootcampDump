@@ -18,7 +18,7 @@ for every in [1, 3]:
     fps = cap.get(cv2.CAP_PROP_FPS)
     # >>> TODO A05
     # 매 every번째 frame만 저장해도 원래 재생시간을 유지하도록 output_fps를 계산하세요. 이 입력은 48이 1·3으로 나누어떨어집니다.
-    output_fps = fps
+    output_fps = fps/every
     # <<< TODO A05
     path = f"outputs/p05_every{every}.avi"
     writer = cv2.VideoWriter(path, cv2.VideoWriter_fourcc(*"MJPG"), output_fps, (160, 120))

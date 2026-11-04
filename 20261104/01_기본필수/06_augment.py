@@ -10,7 +10,7 @@ os.chdir(Path(__file__).resolve().parent)
 image = cv2.imread("scene.png")
 # >>> TODO B06
 # cv2.flip(image, 1)로 좌우 반전한 flipped를 만드세요. 세로 반전은 flipCode=0입니다.
-flipped = image.copy()
+flipped = cv2.flip(image.copy(),1)
 # <<< TODO B06
 # 음수 beta를 사용해도 절댓값 반전이 생기지 않도록 float에서 clip합니다.
 bright = np.clip(image.astype(np.float32) + 30, 0, 255).astype(np.uint8)

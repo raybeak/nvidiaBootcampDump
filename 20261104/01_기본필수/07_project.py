@@ -8,6 +8,7 @@ import numpy as np
 os.chdir(Path(__file__).resolve().parent)
 
 import csv
+#importLib
 
 # 결과 이름의 p07_ 접두어가 입력 파일 덮어쓰기를 방지합니다.
 rows = []
@@ -15,12 +16,12 @@ for filename in ["scene.png", "noisy.png", "objects.png"]:
     image = cv2.imread(filename)
     # >>> TODO B07
     # image를 Gray로 만든 뒤 (너비160, 높이120)으로 축소하세요. 변수는 gray, small입니다.
-    gray = image[:, :, 0]
-    small = gray.copy()
+    gray = cv2.cvtColor(image,6)
+    small = cv2.resize(gray.copy(),(160,120))
     # <<< TODO B07
     # >>> TODO B08
     # 축소한 small에 Canny 80,160을 적용하여 edge를 만드세요.
-    edge = small.copy()
+    edge = cv2.Canny(small.copy(),80,160)
     # <<< TODO B08
     stem = Path(filename).stem
     cv2.imwrite(f"p07_{stem}_gray.png", gray)

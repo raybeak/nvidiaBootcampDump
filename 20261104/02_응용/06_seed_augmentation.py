@@ -22,7 +22,7 @@ def augment(image, seed):
         result = cv2.flip(result, 1)
     # >>> TODO A06
     # float32에서 beta를 더하고 [0,255]로 clip한 뒤 uint8로 돌리세요. uint8 상태로 직접 더하지 않습니다.
-    result = result.copy()
+    result = np.uint8(np.clip(np.float32(result.copy())+beta,0,255))
     # <<< TODO A06
     return result, {"seed": seed, "flip": flip, "beta": beta}
 
