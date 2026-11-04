@@ -13,11 +13,15 @@ from time import perf_counter
 Path("outputs").mkdir(exist_ok=True)
 
 image = cv2.imread("data/scene.png")
+
 rows = []
+
 for name, method in [("nearest", cv2.INTER_NEAREST), ("linear", cv2.INTER_LINEAR), ("area", cv2.INTER_AREA)]:
     # >>> TODO A02
     # 현재 method를 사용해 (너비80, 높이60)으로 축소한 small을 만드세요.
-    small = cv2.resize(image, (80, 60))
+
+    small = cv2.resize(image, (80, 60),interpolation=method)
+
     # <<< TODO A02
     large = cv2.resize(small, (320, 240), interpolation=method)
     cv2.imwrite(f"outputs/p02_{name}_small.png", small)
