@@ -8,6 +8,7 @@ from torch import nn
 from torchvision.datasets import ImageFolder
 from torchvision import transforms as tr
 from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
+#imporLib
 
 torch.set_num_threads(1)
 torch.manual_seed(14)
@@ -15,12 +16,15 @@ BASE = Path(__file__).resolve().parent
 DATA = BASE / "data"
 OUT = BASE / "outputs"
 OUT.mkdir(exist_ok=True)
+#loadVal
 
 # 여기서는 [0,1] RGB 32×32로 학습한 교육용 source 가중치를 사용합니다.
 # ImageNet ResNet18과 입력 변환을 섞지 않습니다.
 transform = tr.Compose([tr.Resize((32, 32)), tr.ToTensor()])
 from collections import defaultdict
 import hashlib
+#importLib2 & loadModel
+
 rows = []
 seen = defaultdict(list)
 for split in ["train", "valid", "test"]:
@@ -28,11 +32,12 @@ for split in ["train", "valid", "test"]:
     for label, name in enumerate(dataset.classes):
         # TODO A01: 해당 라벨의 개수를 세세요.
         # BEGIN A01
-        count = 0  # dataset.targets에서 label의 수를 세세요.
+        count = dataset.targets.count(label)  # dataset.targets에서 label의 수를 세세요.
         # END A01
         rows.append({"split": split, "class": name, "n": count, "ratio": count/len(dataset)})
     for path,_ in dataset.samples:
         seen[hashlib.sha256(Path(path).read_bytes()).hexdigest()].append(str(Path(path).relative_to(DATA)))
+
 table = pd.DataFrame(rows)
 table.to_csv(OUT/"class_counts.csv", index=False)
 print(table.round(4).to_string(index=False))
