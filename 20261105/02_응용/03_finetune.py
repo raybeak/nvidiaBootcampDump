@@ -8,6 +8,7 @@ from torch import nn
 from torchvision.datasets import ImageFolder
 from torchvision import transforms as tr
 from sklearn.metrics import accuracy_score, f1_score, classification_report, confusion_matrix
+#importLib
 
 torch.set_num_threads(1)
 torch.manual_seed(14)
@@ -26,21 +27,33 @@ X_train = torch.stack([train[i][0] for i in range(len(train))])
 y_train = torch.tensor(train.targets, dtype=torch.long)
 X_valid = torch.stack([valid[i][0] for i in range(len(valid))])
 y_valid = torch.tensor(valid.targets, dtype=torch.long)
+#loadVal
 
 # TODO A03: Head-only, Partial 두 전략만 비교하세요. 데이터와 epoch는 고정합니다.
 # BEGIN A03
-experiments = [("head", "none")]  # partial 후보를 추가하세요.
+experiments = [("head", "none"),("partial","none")]  # partial 후보를 추가하세요.
 # END A03
 rows = []
 all_history = []
+
+
 for strategy, balance in experiments:
     torch.manual_seed(14)
     # 제공 부분: 0~8은 Backbone, 9는 새 3클래스 Head입니다.
+
     model = nn.Sequential(
-        nn.Conv2d(3, 8, 3, padding=1, bias=False), nn.BatchNorm2d(8), nn.ReLU(), nn.MaxPool2d(2),
-        nn.Conv2d(8, 16, 3, padding=1, bias=False), nn.BatchNorm2d(16), nn.ReLU(),
-        nn.AdaptiveAvgPool2d((4, 4)), nn.Flatten(), nn.Linear(256, 3),
+        nn.Conv2d(3, 8, 3, padding=1, bias=False),  # 0
+        nn.BatchNorm2d(8), 
+        nn.ReLU(), 
+        nn.MaxPool2d(2),
+        nn.Conv2d(8, 16, 3, padding=1, bias=False), 
+        nn.BatchNorm2d(16),                         # 5
+        nn.ReLU(),
+        nn.AdaptiveAvgPool2d((4, 4)), 
+        nn.Flatten(), 
+        nn.Linear(256, 3),                          # 9
     )
+    
     # 안전한 수치 배열만 읽습니다. Target 이미지로 사전학습한 파일이 아닙니다.
     with np.load(DATA / "source_backbone.npz", allow_pickle=False) as saved:
         state = model.state_dict()
