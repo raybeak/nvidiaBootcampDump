@@ -24,25 +24,37 @@ X_train = torch.stack([train[i][0] for i in range(len(train))])
 y_train = torch.tensor(train.targets, dtype=torch.long)
 X_valid = torch.stack([valid[i][0] for i in range(len(valid))])
 y_valid = torch.tensor(valid.targets, dtype=torch.long)
+
 # 제공 부분: 0~8은 Backbone, 9는 새 3클래스 Head입니다.
 model = nn.Sequential(
-    nn.Conv2d(3, 8, 3, padding=1, bias=False), nn.BatchNorm2d(8), nn.ReLU(), nn.MaxPool2d(2),
-    nn.Conv2d(8, 16, 3, padding=1, bias=False), nn.BatchNorm2d(16), nn.ReLU(),
-    nn.AdaptiveAvgPool2d((4, 4)), nn.Flatten(), nn.Linear(256, 3),
+    nn.Conv2d(3, 8, 3, padding=1, bias=False),  # 0
+    nn.BatchNorm2d(8), 
+    nn.ReLU(), 
+    nn.MaxPool2d(2),
+    nn.Conv2d(8, 16, 3, padding=1, bias=False), 
+    nn.BatchNorm2d(16),                         # 5
+    nn.ReLU(),
+    nn.AdaptiveAvgPool2d((4, 4)), 
+    nn.Flatten(), 
+    nn.Linear(256, 3),                          # 9
 )
+
 # 안전한 수치 배열만 읽습니다. Target 이미지로 사전학습한 파일이 아닙니다.
 with np.load(DATA / "source_backbone.npz", allow_pickle=False) as saved:
     state = model.state_dict()
     state.update({name: torch.from_numpy(saved[name].copy()) for name in saved.files})
 model.load_state_dict(state)
+
 # requires_grad는 가중치 갱신, eval()은 BatchNorm 통계 사용 방식을 제어합니다.
 for p in model.parameters():
     p.requires_grad = False
 for p in model[9].parameters():
     p.requires_grad = True
+    
 model.eval()  # 고정 Backbone의 running 통계도 보존
 optimizer = torch.optim.AdamW(model[9].parameters(), lr=0.01, weight_decay=0.0)
 criterion = nn.CrossEntropyLoss()
+
 # 오류 관찰용 초기 1회 학습. 07번 최종 8회 학습 모델과 구분합니다.
 for epoch in range(1):
     optimizer.zero_grad()
@@ -56,7 +68,8 @@ with torch.no_grad():
 
 # TODO B05: 실제 y_valid와 predictions로 혼동행렬을 만드세요. 행=실제, 열=예측.
 # BEGIN B05
-matrix = np.zeros((3, 3), dtype=int)  # confusion_matrix 호출로 바꾸세요.
+matrix = confusion_matrix(y_valid,predictions,labels=[0,1,2])
+#np.zeros((3, 3), dtype=int)  # confusion_matrix 호출로 바꾸세요.
 # END B05
 print("혼동행렬:\n", matrix)
 print(classification_report(y_valid, predictions, labels=[0, 1, 2], target_names=valid.classes, zero_division=0, digits=3))
